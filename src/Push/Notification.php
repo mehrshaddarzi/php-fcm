@@ -7,8 +7,8 @@ use Fcm\Request;
 
 class Notification implements Request
 {
-    use Push ;
-    
+    use Push;
+
     /**
      * @var string
      */
@@ -28,7 +28,7 @@ class Notification implements Request
      * @var string
      */
     private $icon;
-    
+
     /**
      * @var string
      */
@@ -37,8 +37,8 @@ class Notification implements Request
     /**
      * @var string
      */
-    private $tag;    
-    
+    private $tag;
+
     /**
      * @var string
      */
@@ -53,13 +53,18 @@ class Notification implements Request
      * @var string
      */
     private $click_action;
-    
+
+    /**
+     * @var integer
+     */
+    private $ttl;
+
     /**
      * @param string $title
      * @param string $body
      * @param string $recipient
      */
-    public function __construct(string $title = '', string $body = '', string $recipient = '', string $sound = '', string $icon = '', string $color = '', int $badge = 0, string $tag = '', string $subtitle = '', array $data = [], string $click_action = '')
+    public function __construct(string $title = '', string $body = '', string $recipient = '', string $sound = '', string $icon = '', string $color = '', int $badge = 0, string $tag = '', string $subtitle = '', array $data = [], string $click_action = '', integer $ttl = 0)
     {
         $this->title = $title;
         $this->body = $body;
@@ -69,15 +74,16 @@ class Notification implements Request
         $this->badge = $badge;
         $this->tag = $tag;
         $this->subtitle = $subtitle;
+        $this->ttl = $ttl;
 
         if (!empty($click_action)) {
             $this->click_action = $click_action;
         }
-        
+
         if (!empty($data)) {
             $this->data = $data;
-        } 
-        
+        }
+
         if (!empty($recipient)) {
             $this->addRecipient($recipient);
         }
@@ -106,7 +112,7 @@ class Notification implements Request
 
         return $this;
     }
-    
+
     /**
      * @param string $sound
      *
@@ -117,8 +123,8 @@ class Notification implements Request
         $this->sound = $sound;
 
         return $this;
-    } 
-    
+    }
+
     /**
      * @param string $icon
      *
@@ -142,7 +148,7 @@ class Notification implements Request
 
         return $this;
     }
-    
+
     /**
      * @param string badge
      *
@@ -154,7 +160,7 @@ class Notification implements Request
 
         return $this;
     }
-    
+
     /**
      * @param string $tag
      *
@@ -163,6 +169,18 @@ class Notification implements Request
     public function setTag(string $tag): self
     {
         $this->tag = $tag;
+
+        return $this;
+    }
+
+    /**
+     * @param integer $ttl
+     *
+     * @return $this
+     */
+    public function setTTL(string $ttl): self
+    {
+        $this->ttl = $ttl;
 
         return $this;
     }
@@ -184,7 +202,8 @@ class Notification implements Request
      *
      * @return $this
      */
-    public function setClickAction(string $click_action): self {
+    public function setClickAction(string $click_action): self
+    {
         $this->click_action = $click_action;
 
         return $this;
@@ -236,17 +255,21 @@ class Notification implements Request
         $request['notification']['color'] = $this->color;
         $request['notification']['tag'] = $this->tag;
         $request['notification']['subtitle'] = $this->subtitle;
-        if ($this->badge>0) {
+        if ($this->badge > 0) {
             $request['notification']['badge'] = $this->badge;
         }
 
         if (!empty($this->click_action)) {
             $request['notification']['click_action'] = $this->click_action;
         }
-        
+
+        if (!empty($this->ttl) and is_numeric($this->ttl) and $this->ttl > 0) {
+            $request['time_to_live'] = $this->ttl;
+        }
+
         if (!empty($this->data)) {
             $request['data'] = $this->data;
         }
-        return $request; 
+        return $request;
     }
 }
