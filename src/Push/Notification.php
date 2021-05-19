@@ -64,7 +64,7 @@ class Notification implements Request
      * @param string $body
      * @param string $recipient
      */
-    public function __construct(string $title = '', string $body = '', string $recipient = '', string $sound = '', string $icon = '', string $color = '', int $badge = 0, string $tag = '', string $subtitle = '', array $data = [], string $click_action = '', integer $ttl = 0)
+    public function __construct(string $title = '', string $body = '', string $recipient = '', string $sound = '', string $icon = '', string $color = '', int $badge = 0, string $tag = '', string $subtitle = '', array $data = [], string $click_action = '', int $ttl = 0)
     {
         $this->title = $title;
         $this->body = $body;
@@ -174,11 +174,11 @@ class Notification implements Request
     }
 
     /**
-     * @param integer $ttl
+     * @param int $ttl
      *
      * @return $this
      */
-    public function setTTL(string $ttl): self
+    public function setTTL(int $ttl): self
     {
         $this->ttl = $ttl;
 
